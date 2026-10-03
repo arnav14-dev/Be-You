@@ -62,17 +62,25 @@
     </button>`;
   }).join('');
 
-  // logos are white masks; sized by aspect so wide and tall marks carry equal weight
-  const LOGO_DIM = { google: [318, 113], youtube: [357, 77], facebook: [310, 64], twitter: [338, 65], gartner: [370, 92],
-    aws: [329, 136], nvidia: [341, 77], wipro: [139, 154], icici: [314, 68], asianpaints: [378, 73], mac: [348, 48],
-    clinique: [304, 77], bigbazaar: [316, 77], esbeda: [219, 134], metro: [232, 116], janeshilton: [352, 71],
-    baggit: [171, 146], zouk: [233, 62], lavie: [216, 95], vril: [210, 76], bithalniketan: [283, 126] };
+  // client logos in their own brand colours: [file, width, height] of the trimmed artwork.
+  // Sized by aspect so wide and tall marks carry equal weight.
+  const LOGO = {
+    google: ['google.svg', 270, 89], youtube: ['youtube.svg', 389, 84], facebook: ['facebook.svg', 886, 158],
+    twitter: ['twitter.svg', 341, 63], gartner: ['gartner.svg', 1059, 241], aws: ['aws.svg', 301, 180],
+    nvidia: ['nvidia.svg', 162, 30], wipro: ['wipro.svg', 377, 297], icici: ['icici.webp', 600, 120],
+    asianpaints: ['asianpaints.webp', 600, 110], mac: ['mac.webp', 600, 65], clinique: ['clinique.svg', 720, 202],
+    bigbazaar: ['bigbazaar.webp', 600, 132] };
+  // single-colour silhouettes for brands without colour artwork yet
+  const LOGO_MASK = { esbeda: [219, 134], metro: [232, 116], janeshilton: [352, 71], baggit: [171, 146],
+    zouk: [233, 62], lavie: [216, 95], vril: [210, 76], bithalniketan: [283, 126] };
   // optical corrections for marks that read heavier or lighter than their box
-  const LOGO_TUNE = { metro: .78, wipro: .92, aws: 1.12, bithalniketan: 1.3, janeshilton: 1.08, baggit: .95, mac: 1.05 };
+  const LOGO_TUNE = { google: 1.08, facebook: .95, gartner: .95, wipro: 1.22, asianpaints: 1.16, mac: .9, clinique: 1.05,
+    bigbazaar: .9, metro: .78, bithalniketan: 1.3, janeshilton: 1.08, baggit: .95 };
   $('#logoGrid').innerHTML = D.logos.map(([f, n]) => {
-    const [w, h] = LOGO_DIM[f] || [300, 100];
+    const [file, w, h] = LOGO[f] || [null, ...(LOGO_MASK[f] || [300, 100])];
+    const src = file ? `assets/img/clients/${file}` : `assets/img/logos/${f}.png`;
     const em = 3.4 / Math.sqrt(w / h) * (LOGO_TUNE[f] || 1);
-    return `<div class="logo-cell"><img src="assets/img/logos/${f}.png" alt="${esc(n)}" width="${w}" height="${h}" style="--h:${em.toFixed(3)}" loading="lazy" decoding="async"></div>`;
+    return `<div class="logo-cell"><img src="${src}"${file ? '' : ' class="mono"'} alt="${esc(n)}" width="${w}" height="${h}" style="--h:${em.toFixed(3)}" loading="lazy" decoding="async"></div>`;
   }).join('');
 
 
