@@ -670,6 +670,8 @@
   }
 
   /* ---------- split helpers ---------- */
+  // once words have risen into place, drop their masks so italic tails and descenders aren't clipped
+  const unmask = el => el && el.classList.add('unmasked');
   const splitWords = el => {
     const words = [];
     const walk = node => {
@@ -740,7 +742,7 @@
       .add(() => { syncLock(); }, '-=.3')
       .to('.hero-media', { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'expo.inOut' }, '-=.75')
       .to('.hero-media img', { scale: 1, duration: 2.2, ease: 'expo.out' }, '<.25')
-      .to(heroWords, { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .08 }, '<.1')
+      .to(heroWords, { yPercent: 0, duration: 1.3, ease: 'expo.out', stagger: .08, onComplete: () => unmask($('.hero-title')) }, '<.1')
       .to(heroFade, { autoAlpha: 1, y: 0, duration: 1.1, ease: 'expo.out', stagger: .08 }, '<.35')
       .to(nav, { yPercent: 0, autoAlpha: 1, duration: 1, ease: 'expo.out', clearProps: 'transform,opacity,visibility' }, '<');
   });
@@ -792,7 +794,7 @@
     scrollTrigger: { trigger, start: 'top 88%' }, ...vars
   });
   $$('main [data-split]').forEach(el => {
-    G.from(splitWords(el), { yPercent: 115, duration: 1.25, ease: 'expo.out', stagger: .06, scrollTrigger: { trigger: el, start: 'top 88%' } });
+    G.from(splitWords(el), { yPercent: 115, duration: 1.25, ease: 'expo.out', stagger: .06, onComplete: () => unmask(el), scrollTrigger: { trigger: el, start: 'top 88%' } });
   });
   $$('main section:not(.hero) .kicker').forEach(k => reveal(k, k, { y: 16 }));
   $$('main [data-reveal]').forEach(el => reveal(el, el));

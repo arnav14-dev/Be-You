@@ -75,6 +75,7 @@ section{padding:140px 0; position:relative;}
 
 /* split-text wrappers (added by JS) */
 .w{display:inline-block; overflow:hidden; vertical-align:top; padding:0 .07em .1em 0; margin:0 -.07em -.1em 0;}
+.unmasked .w{overflow:visible;}
 .wi{display:inline-block; will-change:transform;}
 .c{display:inline-block; overflow:hidden; vertical-align:top; padding:0 .1em .24em 0; margin:0 -.1em -.24em 0;}
 .ci{display:inline-block; will-change:transform;}
@@ -240,7 +241,7 @@ header.site-nav.scrolled .hamburger span{background:var(--ink);}
   .hero{align-items:center; padding:100px 0 70px;}
   .hero-inner{padding-bottom:0;}
 }
-.hero-title{font-size:clamp(3.4rem,8.2vw,8.8rem); font-weight:400; line-height:.94; letter-spacing:-.015em; margin-top:28px;}
+.hero-title{font-size:clamp(3.4rem,8.2vw,8.8rem); font-weight:400; line-height:.94; letter-spacing:-.015em; margin-top:28px; font-variation-settings:'opsz' 28;}
 .hero-title .line{display:block; white-space:nowrap;}
 .hero-title .line + .line{padding-left:.85em;}
 .hero-title em{color:var(--brass-soft);}
