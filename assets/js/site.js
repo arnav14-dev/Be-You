@@ -44,7 +44,10 @@
   const mq = D.cats.map((c, i) => `<span${i % 2 ? ' class="o"' : ''}>${esc(c.name)}</span><i></i>`).join('');
   $('#marqueeTrack').innerHTML = mq + mq;
 
-  $('#indexList').innerHTML = D.cats.map((c, i) => `
+  // the index lists the bag lines; smaller goods sit on one quiet line beneath it
+  const LISTED = ['backpacks', 'duffles', 'handbags', 'gifts', 'laptop', 'luggage', 'messenger'];
+  const listed = D.cats.filter(c => LISTED.includes(c.id)), more = D.cats.filter(c => !LISTED.includes(c.id));
+  $('#indexList').innerHTML = listed.map((c, i) => `
     <li class="idx-row" data-cat="${c.id}" tabindex="0" role="button" aria-label="${esc(c.name)}: view ${inCat(c.id).length} styles">
       <span class="idx-no">${pad(i + 1)}</span>
       <span class="idx-thumb">${photo(bySku[REP[c.id]], '')}</span>
@@ -52,7 +55,9 @@
       <span class="idx-meta">${pad(inCat(c.id).length)} Styles</span>
       <span class="idx-arrow">→</span>
     </li>`).join('');
-  $('#idxPreview').innerHTML = `<div class="pv-tilt">${D.cats.map(c => photo(bySku[REP[c.id]], '')).join('')}</div>`;
+  $('#idxMore').innerHTML = `<span class="idx-more-label">Also in the range</span>` +
+    more.map((c, i) => `<span><button type="button" data-cat="${c.id}">${esc(c.name)}</button>${i < more.length - 1 ? '<i aria-hidden="true">·</i>' : ''}</span>`).join('');
+  $('#idxPreview').innerHTML = `<div class="pv-tilt">${listed.map(c => photo(bySku[REP[c.id]], '')).join('')}</div>`;
 
   $('#sampleTrack').innerHTML = SIGNATURE.map(s => {
     const p = bySku[s];
@@ -69,13 +74,14 @@
     twitter: ['twitter.svg', 341, 63], gartner: ['gartner.svg', 1059, 241], aws: ['aws.svg', 301, 180],
     nvidia: ['nvidia.svg', 162, 30], wipro: ['wipro.svg', 377, 297], icici: ['icici.webp', 600, 120],
     asianpaints: ['asianpaints.webp', 600, 110], mac: ['mac.webp', 600, 65], clinique: ['clinique.svg', 720, 202],
-    bigbazaar: ['bigbazaar.webp', 600, 132] };
-  // single-colour silhouettes for brands without colour artwork yet
-  const LOGO_MASK = { esbeda: [219, 134], metro: [232, 116], janeshilton: [352, 71], baggit: [171, 146],
-    zouk: [233, 62], lavie: [216, 95], vril: [210, 76], bithalniketan: [283, 126] };
+    bigbazaar: ['bigbazaar.webp', 600, 132], esbeda: ['esbeda.webp', 241, 180], metro: ['metro.svg', 113, 43],
+    janeshilton: ['janeshilton.webp', 391, 79], baggit: ['baggit.webp', 214, 180], zouk: ['zouk.webp', 545, 180],
+    lavie: ['lavie.webp', 304, 120] };
+  // VRIL and Bithai Niketan have no official artwork online; BE YOU's catalogue shows both in black
+  const LOGO_MASK = { vril: [210, 76], bithalniketan: [283, 126] };
   // optical corrections for marks that read heavier or lighter than their box
   const LOGO_TUNE = { google: 1.08, facebook: .95, gartner: .95, wipro: 1.22, asianpaints: 1.16, mac: .9, clinique: 1.05,
-    bigbazaar: .9, metro: .78, bithalniketan: 1.3, janeshilton: 1.08, baggit: .95 };
+    bigbazaar: .9, esbeda: 1.12, zouk: 1.06, bithalniketan: 1.3, janeshilton: 1.08, baggit: 1.08 };
   $('#logoGrid').innerHTML = D.logos.map(([f, n]) => {
     const [file, w, h] = LOGO[f] || [null, ...(LOGO_MASK[f] || [300, 100])];
     const src = file ? `assets/img/clients/${file}` : `assets/img/logos/${f}.png`;
@@ -226,6 +232,7 @@
     row.addEventListener('click', () => openPanel(row.dataset.cat));
     row.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(row.dataset.cat); } });
   });
+  $$('#idxMore [data-cat]').forEach(b => b.addEventListener('click', () => openPanel(b.dataset.cat)));
 
   /* =========================================================
      Product view
@@ -811,9 +818,6 @@
 
   /* materials follow the scroll position too */
   matRows.forEach((r, i) => ST.create({ trigger: r, start: 'top 60%', end: 'bottom 60%', onToggle: self => self.isActive && setMat(i) }));
-
-  /* footer wordmark rises letter by letter */
-  G.from(splitChars($('#footGiant')), { yPercent: 105, duration: 1.4, ease: 'expo.out', stagger: .05, scrollTrigger: { trigger: '#footGiant', start: 'top 95%' } });
 
   /* ---------- pointer-only flourishes ---------- */
   if (fine) {

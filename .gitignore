@@ -28,8 +28,11 @@
 !/assets/img/factory-wide.jpg
 !/assets/img/leather-thread.jpg
 !/assets/img/clients/
-!/assets/img/logos/
 !/assets/img/products/
+!/assets/img/logos/
+/assets/img/logos/*
+!/assets/img/logos/vril.png
+!/assets/img/logos/bithalniketan.png
 !/assets/img/stock/
 
 .DS_Store

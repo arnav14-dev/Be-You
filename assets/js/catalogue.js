@@ -20,7 +20,7 @@ window.BY_DATA = (() => {
       feats: ['From weekend trips to long journeys', 'Smooth, effortless travel', 'Sets & singles'] },
     { id: 'messenger', name: 'Messenger Bags', letter: 'M', hero: 'msb02-l', line: 'Fashion bags for men — office, travel and everyday.',
       feats: ['Multiple compartments', 'Classic leather & canvas finishes', 'Everyday versatility'] },
-    { id: 'wallets', name: "Men's Wallets", letter: 'W', hero: 'mw01-l', line: 'Exclusive, durable and stylish.',
+    { id: 'wallets', name: 'Men’s Wallets', letter: 'W', hero: 'mw01-l', line: 'Exclusive, durable and stylish.',
       feats: ['Sleek & suave profiles', 'Ample card & cash space', 'Premium finishes'] },
     { id: 'passport', name: 'Passport Organisers', letter: 'P', hero: 'po01-l', line: 'To suit every travel need.',
       feats: ['Slots for passport, cards & tickets', 'Secure closures', 'Leather, PU & fabric options'] },
