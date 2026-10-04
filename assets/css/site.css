@@ -885,3 +885,183 @@ html.gsap .panel, html.gsap .panel.open{transition:none;}
 @media (prefers-reduced-motion: reduce){
   *, *::before, *::after{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
 }
+
+/* =====================================================================
+   HAND-HELD LAYOUT
+   Phones get their own composition rather than a squeezed desktop:
+   a stacked hero, compact facts, swipe rails, a pinned studio preview
+   and a slim quote bar.
+   ===================================================================== */
+.menu-foot, .m-bar{display:none;}
+
+/* light-on-dark display type: a smaller optical size keeps Bodoni's hairlines visible */
+.on-ink .section-head h2, .oem h2, .cta-band h2, .factory .copy h2{font-variation-settings:'opsz' 28;}
+
+/* ---------- menu (≤ 1100px) ---------- */
+@media (max-width:1100px){
+  nav.primary-links{justify-content:flex-start; overflow-y:auto; padding:118px var(--gutter) calc(36px + env(safe-area-inset-bottom));}
+  nav.primary-links a.nav-link{font-variation-settings:'opsz' 24;}
+  .menu-foot{
+    display:flex; flex-direction:column; align-items:flex-start; gap:22px; width:100%;
+    margin-top:auto; padding-top:34px; border-top:1px solid var(--line-bone);
+    opacity:0; transform:translateY(24px); transition:opacity .5s var(--ease), transform .8s var(--ease);
+  }
+  nav.primary-links.open .menu-foot{opacity:1; transform:none; transition-delay:.55s;}
+  header.site-nav nav.primary-links .menu-foot a{
+    font-family:var(--sans); font-style:normal; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; line-height:1;
+    opacity:1; transform:none; transition:color .3s, background .5s;
+  }
+  header.site-nav nav.primary-links .menu-foot .btn{color:var(--ink); padding:18px 28px;}
+  .menu-foot p{display:flex; gap:26px;}
+  header.site-nav nav.primary-links .menu-foot p a{color:rgba(241,234,218,.72); padding-bottom:5px; border-bottom:1px solid var(--line-bone);}
+}
+
+/* ---------- hand-held (≤ 900px) ---------- */
+@media (max-width:900px){
+  /* hero: the bag owns the top of the screen; the copy sits over the dark plinth */
+  .hero{display:flex; flex-direction:column; align-items:stretch; padding:0;}
+  .hero-media{position:relative; inset:auto; width:100%; flex:1 1 auto; min-height:50svh;}
+  .hero-media .px{inset:-6% 0;}
+  .hero-media img{opacity:1; object-position:50% 56%;}
+  .hero-media::after{background:linear-gradient(180deg, rgba(16,13,10,.5) 0%, rgba(16,13,10,0) 20%, rgba(16,13,10,0) 56%, var(--ink) 100%);}
+  .hero-inner{margin-top:-88px; padding-bottom:44px;}
+  .hero-foot{display:none;}
+
+  /* process: one numbering system and calmer frames */
+  .step-count, .p-big{display:none;}
+  .p-card{padding-top:0;}
+  .p-media{height:44vh; max-height:380px;}
+
+  /* factory: one strong photograph */
+  .factory .inset{display:none;}
+  .factory .photo{min-height:0; aspect-ratio:4 / 3.2;}
+}
+
+/* ---------- portrait tablets: studio side by side, the preview held beside the controls ---------- */
+@media (min-width:601px) and (max-width:900px){
+  .studio-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:40px; align-items:start;}
+  .st-stage{position:sticky; top:96px;}
+}
+
+/* ---------- phones (≤ 600px) ---------- */
+@media (max-width:600px){
+  /* studio: heading, the name field right above the folio (type and watch it appear),
+     then the folio held on screen while the finish and leather choices scroll beneath it */
+  .studio-grid{grid-template-columns:minmax(0,1fr); gap:28px; align-items:start;}
+  .st-copy, .st-controls{display:contents;}
+  .st-copy .section-head{order:1; margin-bottom:0;}
+  .st-controls > .f-field:first-child{order:2;}
+  .st-stage{
+    order:3; position:sticky; top:0; z-index:3; background:var(--bone);
+    margin:0 calc(-1 * var(--gutter)); padding:0 var(--gutter) 14px;
+  }
+  .st-controls > :not(:first-child){order:4;}
+
+  section{padding:80px 0;}
+  .section-head{margin-bottom:38px;}
+  .head-split{margin-bottom:38px;}
+  .head-split .count-tag{display:none;}
+
+  /* hero: frame the bag closer */
+  .hero-media .px{inset:-6% -14%;}
+  .hero-title{font-size:clamp(2.5rem,11.6vw,3.3rem); margin-top:18px;}
+  .hero-row{gap:26px; margin-top:22px;}
+  .hero .sub{font-size:.98rem;}
+
+  .marquee{padding:20px 0;}
+
+  /* about: facts as a compact table, the three numbers in one row */
+  .about{padding-top:70px;}
+  .about .grid{gap:44px;}
+  .about-media .frame{height:min(108vw,440px);}
+  .about-lead{font-size:1.24rem; line-height:1.5; margin-top:24px;}
+  .about-sign{display:block; margin-top:30px; padding-top:0;}
+  .about-sign div{display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:13px 0; border-bottom:1px solid var(--line-b);}
+  .about-sign strong{margin-top:0; font-size:1.05rem; text-align:right;}
+  .stat-list{grid-template-columns:repeat(3,1fr); margin-top:54px;}
+  .stat-list .item, .stat-list .item + .item{padding:22px 8px 2px 0; border-bottom:none; border-right:1px solid var(--line-b);}
+  .stat-list .item + .item{padding-left:14px;}
+  .stat-list .item:last-child{border-right:none;}
+  .stat-list .num{font-size:2.3rem;}
+  .stat-list .lbl{font-size:.58rem; letter-spacing:.12em; line-height:1.5; margin-top:10px;}
+
+  /* signature styles: swipe, no arrow buttons */
+  .rail-ctrl{display:none;}
+  .samples-top{margin-bottom:34px;}
+  .sample-track{gap:16px;}
+  .sample-item{width:68vw;}
+  .rail-progress{margin-top:30px;}
+
+  /* gifting: solid ink, left-aligned, the services as a tidy two-column list */
+  .oem{padding:84px 0; text-align:left;}
+  .oem-bg, .oem::before{display:none;}
+  .oem h2{font-size:clamp(2.2rem,10vw,2.6rem);}
+  .oem p.lead{margin:22px 0 30px; font-size:1rem;}
+  .oem-list{display:grid; grid-template-columns:1fr 1fr; gap:0 18px; margin-bottom:36px; border-top:1px solid var(--line-bone);}
+  .oem-list li{
+    display:flex; align-items:center; gap:10px; padding:14px 0; border:0; border-bottom:1px solid var(--line-bone);
+    border-radius:0; background:none; font-size:.64rem; letter-spacing:.12em; line-height:1.4;
+  }
+  .oem-list li::before{content:''; width:10px; height:1px; background:var(--brass); flex:none;}
+
+  /* studio */
+  .stage{aspect-ratio:1 / .9;}
+  .stage-cap{margin-top:10px;}
+  .st-controls{gap:28px;}
+
+  /* process: the next card peeks in so the swipe is obvious */
+  .process-pin{padding:80px 0 56px;}
+  .process-head{margin-bottom:28px;}
+  .process-track{gap:16px;}
+  .p-card{width:80vw;}
+  .p-body{margin-top:18px; padding-top:16px;}
+
+  .mat-row{padding:16px 0;}
+
+  /* factory */
+  .factory .copy{padding:72px var(--gutter) 76px;}
+  .cap-list{display:grid; grid-template-columns:1fr 1fr; column-gap:22px; margin-top:32px;}
+  .cap-list li{font-size:.84rem; padding:13px 0;}
+
+  /* why */
+  .why-row{grid-template-columns:36px 1fr; gap:6px 14px; padding:20px 0;}
+  .why-row .rn{font-size:1.1rem;}
+  .why-row h4{font-size:1.18rem;}
+  .why-row p{font-size:.88rem;}
+
+  /* call to action */
+  .cta-band{padding:96px 0;}
+  .cta-band h2{font-size:clamp(2.3rem,10.4vw,2.7rem);}
+  .cta-band .btn-row{flex-direction:column; align-items:stretch; gap:12px; max-width:330px; margin:40px auto 0;}
+  .cta-band .btn{justify-content:center;}
+
+  /* footer */
+  footer{padding:72px 0 calc(28px + env(safe-area-inset-bottom));}
+  .foot-grid{grid-template-columns:1fr 1fr; gap:40px 22px;}
+  .foot-grid > div:first-child{grid-column:1 / -1;}
+  .foot-grid > div:last-child{display:none;}
+  footer ul li{font-size:.88rem;}
+  .foot-bottom{margin-top:48px; flex-direction:column; gap:6px;}
+
+  /* quote bar */
+  .m-bar{
+    display:flex; gap:10px; position:fixed; left:0; right:0; bottom:0; z-index:150;
+    padding:10px var(--gutter) calc(10px + env(safe-area-inset-bottom));
+    background:rgba(16,13,10,.94); -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border-top:1px solid var(--line-bone); transform:translateY(110%); transition:transform .6s var(--ease);
+  }
+  .m-bar.on{transform:none;}
+  html.lock .m-bar, html.menu-open .m-bar{transform:translateY(110%);}
+  .m-bar a{display:flex; align-items:center; justify-content:center; gap:10px; height:46px; font-family:var(--sans); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; font-weight:500;}
+  .m-bar-main{flex:1; background:var(--brass); color:var(--ink);}
+  .m-bar-wa{padding:0 18px; border:1px solid var(--line-bone); color:var(--bone);}
+}
+
+/* touch screens keep hover-only effects from sticking after a tap */
+@media (hover:none){
+  .why-row:hover{color:inherit;}
+  .why-row:hover::before{transform:scaleY(0);}
+  .why-row:hover h4{transform:none;}
+  .why-row:hover p{color:rgba(16,13,10,.58);}
+  .cap-list li:hover{padding-left:0; color:rgba(241,234,218,.66);}
+}

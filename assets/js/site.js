@@ -137,6 +137,20 @@
   hamburger.addEventListener('click', () => setMenu(!ui.menu));
   matchMedia('(min-width: 1101px)').addEventListener('change', e => { if (e.matches && ui.menu) setMenu(false); });
 
+  /* phones: the quote bar shows once the hero is gone, and steps aside wherever a call to action is already on screen */
+  const mBar = $('#mBar');
+  if (mBar && 'IntersectionObserver' in window) {
+    const quiet = [$('#top'), $('#ctaBand'), $('#contact'), $('footer')].filter(Boolean), seen = new Map();
+    const barIO = new IntersectionObserver(entries => {
+      entries.forEach(en => seen.set(en.target, en.isIntersecting));
+      const show = !quiet.some(el => seen.get(el));
+      mBar.classList.toggle('on', show);
+      mBar.setAttribute('aria-hidden', String(!show));
+      $$('a', mBar).forEach(a => { a.tabIndex = show ? 0 : -1; });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    quiet.forEach(el => barIO.observe(el));
+  }
+
   /* ---------- in-page links ---------- */
   const scrollToEl = (el, opts = {}) => {
     const offset = opts.offset || 0;
